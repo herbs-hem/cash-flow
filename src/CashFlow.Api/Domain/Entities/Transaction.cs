@@ -1,6 +1,6 @@
 ﻿using CashFlow.Api.Domain.Enums;
 
-namespace PocCQRS.Domain.Entities;
+namespace CashFlow.Api.Domain.Entities;
 
 public sealed record Transaction(
     Guid BankAccountId, decimal Amount, OperationType OperationType,
