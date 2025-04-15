@@ -14,6 +14,10 @@ Haverá 3 `EntryPoitns` nesta solução em um futuro próximo, são eles:
 
 Todos eles seguem a abordagem do padrão de arquitetura de software (eg, Clean Architecture) para manter os entrypoints como plug&play.
 
+### Artefatos de arquitetura
+OS detalhes da arquitetura proposta pode ser vista nos documentos / artefatos ADRs - Architecture Decision Records [**aqui**](./adr-cash-flow/README.md).
+
+
 ### _Kestrel (dev-test locally)_
 Defina o projeto cash-flow-api como projeto de inicialização. Ou seja, clique com botão direito do mouse sobre o projeto e marque o item `Set as Startup Project` do menu.
 
