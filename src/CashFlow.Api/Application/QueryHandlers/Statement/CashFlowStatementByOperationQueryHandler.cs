@@ -65,7 +65,7 @@ public class CashFlowStatementByOperationQueryHandler :
         var validationResults
             = await new AutoValidator()
                 .Build<CashFlowStatementByOperationQuery>()
-                .With(ctx => ctx.CompanyAccountId, async value => await _service.BankAccountExistsAsync(value), $"{nameof(request.CompanyAccountId)}: {request.CompanyAccountId} not found! ")
+                .With(ctx => ctx.CompanyAccountId, async value => await _service.CompanyAccountExistsAsync(value), $"{nameof(request.CompanyAccountId)}: {request.CompanyAccountId} not found! ")
                 .With(ctx => ctx.OperationType, value => OperationType.All != value, "Query only allows Inflow or Outflow transactions!")
                 .ValidateAsync(request);
 

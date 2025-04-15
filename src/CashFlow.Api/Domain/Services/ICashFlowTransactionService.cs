@@ -6,11 +6,11 @@ namespace CashFlow.Api.Domain.Services
 {
     public interface ICashFlowTransactionService
     {
-        Task<bool> BankAccountExistsAsync(Guid value);
+        Task<bool> CompanyAccountExistsAsync(Guid value);
 
-        Task<Guid> CreditAsync(Guid companyAccountId, decimal amount, string description, DateTime date, decimal balanceStartDay, decimal balanceEndDay);
+        Task<Guid> InflowAsync(Guid companyAccountId, decimal amount, string description, DateTime date, decimal balanceStartDay, decimal balanceEndDay);
 
-        Task<Guid> DebitAsync(Guid companyAccountId, decimal amount, string description, DateTime date, decimal balanceStartDay, decimal balanceEndDay);
+        Task<Guid> OutflowAsync(Guid companyAccountId, decimal amount, string description, DateTime date, decimal balanceStartDay, decimal balanceEndDay);
 
         Task<CashFlowBalanceReadModel> GetBalanceAsync(Guid companyAccountId);
 

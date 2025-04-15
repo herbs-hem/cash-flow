@@ -5,9 +5,9 @@ namespace CashFlow.Api.Infrastructure.Persistence.NoSql.Interfaces;
 
 public interface ISnapshotStore
 {
-    Task<BankAccountSnapshot?> GetSnapshotAsync(string aggregateId);
+    Task<CashFlowSnapshot?> GetSnapshotAsync(string aggregateId);
 
-    Task<BankAccountSnapshot?> GetLastSnapshotAsync(Guid companyAccountId);
+    Task<CashFlowSnapshot?> GetLastSnapshotAsync(Guid companyAccountId);
 
     Task SaveSnapshotAsync(CashFlowAggregateRoot aggregate);
 }

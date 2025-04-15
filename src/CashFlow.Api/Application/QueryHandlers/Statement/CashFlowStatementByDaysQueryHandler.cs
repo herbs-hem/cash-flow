@@ -63,7 +63,7 @@ public class CashFlowStatementByDaysQueryHandler :
         var validationResults
             = await new AutoValidator()
                 .Build<CashFlowStatementByDaysQuery>()
-                .With(ctx => ctx.CompanyAccountId, async value => await _service.BankAccountExistsAsync(value), $"{request.CompanyAccountId} not found!")
+                .With(ctx => ctx.CompanyAccountId, async value => await _service.CompanyAccountExistsAsync(value), $"{request.CompanyAccountId} not found!")
                 .With(ctx => ctx.Days, value => value >= StatementRulesConstant.MinimumDaysLimit && value <= StatementRulesConstant.MaximumDaysLimit, $"Days outside the allowed range ({StatementRulesConstant.MinimumDaysLimit} to {StatementRulesConstant.MaximumDaysLimit})")
                 .ValidateAsync(request);
 

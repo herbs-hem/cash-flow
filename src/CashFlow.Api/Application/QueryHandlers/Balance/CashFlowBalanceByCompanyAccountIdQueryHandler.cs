@@ -61,7 +61,7 @@ public class CashFlowBalanceByCompanyAccountIdQueryHandler :
         var validationResults
             = await new AutoValidator()
                 .Build<CashFlowBalanceByCompanyAccountIdQuery>()
-                .With(ctx => ctx.CompanyAccountId, async value => await _service.BankAccountExistsAsync(value), $"{request.CompanyAccountId} not found!")
+                .With(ctx => ctx.CompanyAccountId, async value => await _service.CompanyAccountExistsAsync(value), $"{request.CompanyAccountId} not found!")
                 .ValidateAsync(request);
 
         if (!validationResults.IsValid)

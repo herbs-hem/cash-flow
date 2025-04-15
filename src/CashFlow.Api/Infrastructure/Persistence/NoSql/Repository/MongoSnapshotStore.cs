@@ -8,28 +8,28 @@ namespace CashFlow.Api.Infrastructure.Persistence.NoSql.Repository;
 
 public class MongoSnapshotStore : ISnapshotStore
 {
-    private readonly IMongoCollection<BankAccountSnapshot> _collection;
+    private readonly IMongoCollection<CashFlowSnapshot> _collection;
 
     public MongoSnapshotStore(IMongoDatabase db)
     {
-        _collection = db.GetCollection<BankAccountSnapshot>("snapshots");
+        _collection = db.GetCollection<CashFlowSnapshot>("snapshots");
     }
 
-    public async Task<BankAccountSnapshot?> GetLastSnapshotAsync(Guid companyAccountId)
+    public async Task<CashFlowSnapshot?> GetLastSnapshotAsync(Guid companyAccountId)
     {
-        var filter = Builders<BankAccountSnapshot>.Filter.Eq(s => s.CompanyAccountId, companyAccountId);
+        var filter = Builders<CashFlowSnapshot>.Filter.Eq(s => s.CompanyAccountId, companyAccountId);
         return await _collection.Find(filter).SortByDescending(s => s.Date).FirstOrDefaultAsync();
     }
 
-    public async Task<BankAccountSnapshot?> GetSnapshotAsync(string aggregateId)
+    public async Task<CashFlowSnapshot?> GetSnapshotAsync(string aggregateId)
     {
-        var filter = Builders<BankAccountSnapshot>.Filter.Eq(s => s.AggregateId, aggregateId);
+        var filter = Builders<CashFlowSnapshot>.Filter.Eq(s => s.AggregateId, aggregateId);
         return await _collection.Find(filter).SortByDescending(s => s.Date).FirstOrDefaultAsync();
     }
 
     public async Task SaveSnapshotAsync(CashFlowAggregateRoot aggregate)
     {
-        var snapshot = new BankAccountSnapshot
+        var snapshot = new CashFlowSnapshot
         {
             CompanyAccountId = aggregate.CompanyAccountId,
             AggregateId = aggregate.AggregateId,
@@ -40,7 +40,7 @@ public class MongoSnapshotStore : ISnapshotStore
             LastEventId = Guid.NewGuid()
         };
 
-        var filter = Builders<BankAccountSnapshot>.Filter.Eq(s => s.AggregateId, aggregate.AggregateId);
+        var filter = Builders<CashFlowSnapshot>.Filter.Eq(s => s.AggregateId, aggregate.AggregateId);
         await _collection.ReplaceOneAsync(filter, snapshot, new ReplaceOptions { IsUpsert = true });
     }
 }

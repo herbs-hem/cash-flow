@@ -64,7 +64,7 @@ public class CashFlowStatementByDaysAndOperationQueryHandler :
         var validationResults
             = await new AutoValidator()
                 .Build<CashFlowStatementByDaysAndOperationQuery>()
-                .With(ctx => ctx.CompanyAccountId, async value => await _service.BankAccountExistsAsync(value), $"{request.CompanyAccountId} not found! ")
+                .With(ctx => ctx.CompanyAccountId, async value => await _service.CompanyAccountExistsAsync(value), $"{request.CompanyAccountId} not found! ")
                 .With(ctx => ctx.Days, value => value >= StatementRulesConstant.MinimumDaysLimit && value <= StatementRulesConstant.MaximumDaysLimit, $"Days outside the allowed range ({StatementRulesConstant.MinimumDaysLimit} to {StatementRulesConstant.MaximumDaysLimit})")
                 .With(ctx => ctx.OperationType, value => OperationType.All != value, errorMessage: "Query only allows Inflow or Outflow transactions!")
                 .ValidateAsync(request);

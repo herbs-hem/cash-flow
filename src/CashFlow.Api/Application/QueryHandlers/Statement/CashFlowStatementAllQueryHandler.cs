@@ -63,7 +63,7 @@ public class CashFlowStatementAllQueryHandler :
         var validationResults
             = await new AutoValidator()
                 .Build<CashFlowStatementAllQuery>()
-                .With(ctx => ctx.CompanyAccountId, async value => await _service.BankAccountExistsAsync(value), $"{request.CompanyAccountId} not found!")
+                .With(ctx => ctx.CompanyAccountId, async value => await _service.CompanyAccountExistsAsync(value), $"{request.CompanyAccountId} not found!")
                 .ValidateAsync(request);
 
         if (!validationResults.IsValid)

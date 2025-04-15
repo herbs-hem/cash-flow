@@ -23,12 +23,12 @@ namespace CashFlow.Api.Domain.Services
             _logger = logger;
         }
 
-        public async Task<bool> BankAccountExistsAsync(Guid value)
+        public async Task<bool> CompanyAccountExistsAsync(Guid value)
         {
             return await _accountBalanceRepository.ExistsByAsync(value);
         }
 
-        public async Task<Guid> CreditAsync(
+        public async Task<Guid> InflowAsync(
              Guid companyAccountId, decimal amount, string description, DateTime date, decimal balanceStartDay, decimal balanceEndDay)
         {
             var accountBalance = new AccountBalance(companyAccountId, balanceStartDay, balanceEndDay, date);
@@ -44,7 +44,7 @@ namespace CashFlow.Api.Domain.Services
             return transactionId;
         }
 
-        public async Task<Guid> DebitAsync(
+        public async Task<Guid> OutflowAsync(
             Guid companyAccountId, decimal amount, string description, DateTime date, decimal balanceStartDay, decimal balanceEndDay)
         {
             var accountBalance = new AccountBalance(companyAccountId, balanceStartDay, balanceEndDay, date);
