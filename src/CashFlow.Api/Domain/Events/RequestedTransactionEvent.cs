@@ -4,7 +4,7 @@ using CashFlow.Api.Domain.Enums;
 
 namespace CashFlow.Api.Domain.Events;
 
-public record RequestedTransactionEvent(Guid TransactionId, Guid BankAccountId, decimal Amount, OperationType OperationType) : IDomainEvent
+public record RequestedTransactionEvent(Guid TransactionId, Guid CompanyAccountId, decimal Amount, OperationType OperationType) : IDomainEvent
 {
     [BsonRepresentation(BsonType.String)]
     public OperationType OperationType { get; init; } = OperationType;

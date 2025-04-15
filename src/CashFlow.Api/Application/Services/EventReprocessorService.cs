@@ -8,15 +8,15 @@ namespace CashFlow.Api.Application.Services
 {
     public class EventReprocessorService<TEvent> : IEventReprocessorService<TEvent> where TEvent : class, IDomainEvent
     {
-        private readonly ILogger<EventReprocessorService<TEvent>> _logger;
-        private readonly Publisher<TEvent> _publisher;
         private readonly IMongoCollection<DeadLetterEventDocument> _deadLetterStore;
+        private readonly Publisher<TEvent> _publisher;
+        private readonly ILogger<EventReprocessorService<TEvent>> _logger;
 
         public EventReprocessorService(IMongoDatabase mongoDatabase, IPublisherFactory publisherFactory, ILogger<EventReprocessorService<TEvent>> logger)
         {
-            _logger = logger;
-            _publisher = publisherFactory.CreatePublisher<TEvent>();
             _deadLetterStore = mongoDatabase.GetCollection<DeadLetterEventDocument>("deadLetterEvents");
+            _publisher = publisherFactory.CreatePublisher<TEvent>();
+            _logger = logger;
         }
 
         public async Task ReprocessAllAsync()

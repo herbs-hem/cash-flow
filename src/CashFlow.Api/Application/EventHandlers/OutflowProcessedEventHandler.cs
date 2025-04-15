@@ -16,8 +16,8 @@ public class OutflowProcessedEventHandler : IEventHandler<OutflowProcessedEvent,
 
     public async Task<Guid> HandleAsync(OutflowProcessedEvent @event)
     {
-        _logger.LogInformation($"Pedido criado: {{BankAccountId}} {Environment.NewLine} {{EventData}}", @event.BankAccountId, System.Text.Json.JsonSerializer.Serialize(@event));
+        _logger.LogInformation($"Pedido criado: {{CompanyAccountId}} {Environment.NewLine} {{EventData}}", @event.CompanyAccountId, System.Text.Json.JsonSerializer.Serialize(@event));
 
-        return await _service.DebitAsync(@event.BankAccountId, @event.Amount, @event.Description, @event.OccurredAt, @event.BalanceStartDay, @event.BalanceEndDay);
+        return await _service.DebitAsync(@event.CompanyAccountId, @event.Amount, @event.Description, @event.OccurredAt, @event.BalanceStartDay, @event.BalanceEndDay);
     }
 }

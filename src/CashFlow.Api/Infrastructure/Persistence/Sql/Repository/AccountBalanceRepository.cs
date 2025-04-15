@@ -18,15 +18,15 @@ public class AccountBalanceRepository : IAccountBalanceRepository
         using var connection = _connectionFactory.CreateConnection();
 
         await connection.ExecuteAsync(
-            @"INSERT INTO AccountBalances (BankAccountId, InitialBalance, FinalBalance, Date)
-              VALUES (@BankAccountId, @InitialBalance, @FinalBalance, @Date)
+            @"INSERT INTO AccountBalances (CompanyAccountId, InitialBalance, FinalBalance, Date)
+              VALUES (@CompanyAccountId, @InitialBalance, @FinalBalance, @Date)
               ON DUPLICATE KEY UPDATE
               InitialBalance = VALUES(InitialBalance),
               FinalBalance = VALUES(FinalBalance),
               Date = VALUES(Date)",
             new
             {
-                accountBalance.BankAccountId,
+                accountBalance.CompanyAccountId,
                 accountBalance.InitialBalance,
                 accountBalance.FinalBalance,
                 Date = DateTime.UtcNow
@@ -35,37 +35,37 @@ public class AccountBalanceRepository : IAccountBalanceRepository
         return accountBalance.FinalBalance;
     }
 
-    public async Task<AccountBalance> GetByAsync(Guid bankAccountId)
+    public async Task<AccountBalance> GetByAsync(Guid companyAccountId)
     {
         using var connection = _connectionFactory.CreateConnection();
 
         return await connection.QueryFirstOrDefaultAsync<AccountBalance>(
-            "SELECT BankAccountId, InitialBalance, FinalBalance, Date FROM AccountBalances WHERE BankAccountId = @BankAccountId",
-            new { BankAccountId = bankAccountId });
+            "SELECT CompanyAccountId, InitialBalance, FinalBalance, Date FROM AccountBalances WHERE CompanyAccountId = @CompanyAccountId",
+            new { CompanyAccountId = companyAccountId });
     }
 
-    public async Task<AccountBalance> GetByAsync(Guid bankAccountId, DateTime date)
+    public async Task<AccountBalance> GetByAsync(Guid companyAccountId, DateTime date)
     {
         using var connection = _connectionFactory.CreateConnection();
 
         return await connection.QueryFirstOrDefaultAsync<AccountBalance>(
-            @"SELECT BankAccountId, InitialBalance, FinalBalance, Date
+            @"SELECT CompanyAccountId, InitialBalance, FinalBalance, Date
                 FROM AccountBalances
-              WHERE BankAccountId = @BankAccountId
+              WHERE CompanyAccountId = @CompanyAccountId
                 AND Date >= @Date",
             new
             {
-                BankAccountId = bankAccountId,
+                CompanyAccountId = companyAccountId,
                 Date = date
             });
     }
 
-    public async Task<bool> ExistsByAsync(Guid bankAccountId)
+    public async Task<bool> ExistsByAsync(Guid CompanyAccountId)
     {
         using var connection = _connectionFactory.CreateConnection();
 
         return await connection.QueryFirstOrDefaultAsync<bool>(
-            "SELECT 1 FROM AccountBalances WHERE BankAccountId = @BankAccountId",
-            new { BankAccountId = bankAccountId });
+            "SELECT 1 FROM AccountBalances WHERE CompanyAccountId = @CompanyAccountId",
+            new { CompanyAccountId = CompanyAccountId });
     }
 }

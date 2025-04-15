@@ -10,10 +10,10 @@ public static class CashFlowStatementEndpoints
 {
     public static void MapCashFlowStatementEndpoints(this WebApplication app)
     {
-        app.MapGet("/api/v1/cashflow/statement/{cashierId}",
-            async ([FromRoute] string cashierId, IMediator mediator) =>
+        app.MapGet("/api/v1/cashflow/statement/{companyAccountId}",
+            async ([FromRoute] string companyAccountId, IMediator mediator) =>
             {
-                var query = new CashFlowStatementAllQuery(Guid.Parse(cashierId));
+                var query = new CashFlowStatementAllQuery(Guid.Parse(companyAccountId));
                 var result = await mediator.Send(query);
 
                 if (result is null)
@@ -27,10 +27,10 @@ public static class CashFlowStatementEndpoints
             .WithTags("CashFlowStatement")
             .WithOpenApi();
 
-        app.MapGet("/api/v1/cashflow/statement/{cashierId}/{days}",
-            async ([FromRoute] string cashierId, int days, IMediator mediator) =>
+        app.MapGet("/api/v1/cashflow/statement/{companyAccountId}/{days}",
+            async ([FromRoute] string companyAccountId, int days, IMediator mediator) =>
             {
-                var query = new CashFlowStatementByDaysQuery(Guid.Parse(cashierId), days);
+                var query = new CashFlowStatementByDaysQuery(Guid.Parse(companyAccountId), days);
                 var result = await mediator.Send(query);
 
                 if (result is null)
@@ -44,10 +44,10 @@ public static class CashFlowStatementEndpoints
             .WithTags("CashFlowStatement")
             .WithOpenApi();
 
-        app.MapGet("/api/v1/cashflow/statement/{cashierId}/inflow",
-            async ([FromRoute] string cashierId, IMediator mediator) =>
+        app.MapGet("/api/v1/cashflow/statement/{companyAccountId}/inflow",
+            async ([FromRoute] string companyAccountId, IMediator mediator) =>
             {
-                var query = new CashFlowStatementByOperationQuery(Guid.Parse(cashierId), OperationType: OperationType.Inflow);
+                var query = new CashFlowStatementByOperationQuery(Guid.Parse(companyAccountId), OperationType: OperationType.Inflow);
                 var result = await mediator.Send(query);
 
                 if (result is null)
@@ -61,10 +61,10 @@ public static class CashFlowStatementEndpoints
             .WithTags("CashFlowStatement")
             .WithOpenApi();
 
-        app.MapGet("/api/v1/cashflow/statement/{cashierId}/inflow/{days}",
-            async ([FromRoute] string cashierId, int days, IMediator mediator) =>
+        app.MapGet("/api/v1/cashflow/statement/{companyAccountId}/inflow/{days}",
+            async ([FromRoute] string companyAccountId, int days, IMediator mediator) =>
             {
-                var query = new CashFlowStatementByDaysAndOperationQuery(Guid.Parse(cashierId), Days: days, OperationType: OperationType.Inflow);
+                var query = new CashFlowStatementByDaysAndOperationQuery(Guid.Parse(companyAccountId), Days: days, OperationType: OperationType.Inflow);
                 var result = await mediator.Send(query);
 
                 if (result is null)
@@ -78,10 +78,10 @@ public static class CashFlowStatementEndpoints
             .WithTags("CashFlowStatement")
             .WithOpenApi();
 
-        app.MapGet("/api/v1/cashflow/statement/{cashierId}/outflow",
-            async ([FromRoute] string cashierId, IMediator mediator) =>
+        app.MapGet("/api/v1/cashflow/statement/{companyAccountId}/outflow",
+            async ([FromRoute] string companyAccountId, IMediator mediator) =>
             {
-                var query = new CashFlowStatementByOperationQuery(Guid.Parse(cashierId), OperationType: OperationType.Outflow);
+                var query = new CashFlowStatementByOperationQuery(Guid.Parse(companyAccountId), OperationType: OperationType.Outflow);
                 var result = await mediator.Send(query);
 
                 if (result is null)
@@ -95,10 +95,10 @@ public static class CashFlowStatementEndpoints
             .WithTags("CashFlowStatement")
             .WithOpenApi();
 
-        app.MapGet("/api/v1/cashflow/statement/{cashierId}/outflow/{days}",
-            async ([FromRoute] string cashierId, int days, IMediator mediator) =>
+        app.MapGet("/api/v1/cashflow/statement/{companyAccountId}/outflow/{days}",
+            async ([FromRoute] string companyAccountId, int days, IMediator mediator) =>
             {
-                var query = new CashFlowStatementByDaysAndOperationQuery(Guid.Parse(cashierId), Days: days, OperationType: OperationType.Outflow);
+                var query = new CashFlowStatementByDaysAndOperationQuery(Guid.Parse(companyAccountId), Days: days, OperationType: OperationType.Outflow);
                 var result = await mediator.Send(query);
 
                 if (result is null)

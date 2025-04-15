@@ -12,7 +12,7 @@ public class BankAccountSnapshot
     public string AggregateId { get; set; } = default!;
 
     [BsonRepresentation(BsonType.String)]
-    public Guid BankAccountId { get; set; } = default!;
+    public Guid CompanyAccountId { get; set; } = default!;
 
     [BsonElement("Date")]
     [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]

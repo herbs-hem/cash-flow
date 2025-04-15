@@ -7,7 +7,7 @@ public interface ISnapshotStore
 {
     Task<BankAccountSnapshot?> GetSnapshotAsync(string aggregateId);
 
-    Task<BankAccountSnapshot?> GetLastSnapshotAsync(Guid bankAccountId);
+    Task<BankAccountSnapshot?> GetLastSnapshotAsync(Guid companyAccountId);
 
     Task SaveSnapshotAsync(CashFlowAggregateRoot aggregate);
 }

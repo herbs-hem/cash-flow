@@ -6,9 +6,9 @@ public interface IAccountBalanceRepository
 {
     Task<decimal> UpsertAsync(AccountBalance accountBalance);
 
-    Task<AccountBalance> GetByAsync(Guid bankAccountId);
+    Task<AccountBalance> GetByAsync(Guid companyAccountId);
 
-    Task<AccountBalance> GetByAsync(Guid bankAccountId, DateTime date);
+    Task<AccountBalance> GetByAsync(Guid companyAccountId, DateTime date);
 
-    Task<bool> ExistsByAsync(Guid bankAccountId);
+    Task<bool> ExistsByAsync(Guid companyAccountId);
 }

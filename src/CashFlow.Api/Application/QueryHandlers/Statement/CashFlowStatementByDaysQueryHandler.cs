@@ -8,6 +8,7 @@ using CashFlow.Api.Domain.Constants;
 using CashFlow.Api.Domain.Services;
 using CashFlow.Api.Infrastructure.Cache.Interfaces;
 using CashFlow.Api.Domain.Enums;
+using Newtonsoft.Json;
 
 namespace CashFlow.Api.Application.QueryHandlers.Statement;
 
@@ -35,16 +36,20 @@ public class CashFlowStatementByDaysQueryHandler :
         if (result.IsFailure)
             return result.ToResult<CashFlowStatementReadModel>();
 
-        var statementCacheKey = $"{request.Days}_StatementQuery_{request.CashierId}_{DateTime.UtcNow.Date:yyyyMMdd}";
+        var statementCacheKey = $"{request.Days}_StatementQuery_{request.CompanyAccountId}_{DateTime.UtcNow.Date:yyyyMMdd}";
 
         _cacheClient.TryGetValue(statementCacheKey, out CashFlowStatementReadModel statement);
+        _logger.LogDebug("Try get statement on cache! Statement: {Statement}", JsonConvert.SerializeObject(statement));
 
-        statement ??= await _service.GetStatementAsync(request.CashierId, request.Days, OperationType.All);
+        statement ??= await _service.GetStatementAsync(request.CompanyAccountId, request.Days, OperationType.All);
 
         if (statement != null)
+        {
             await _cacheClient.SetAsync(statementCacheKey, statement);
+            _logger.LogDebug("Set statement into cache! CacheKey: {CacheKey} - Statement: {Statement}", statementCacheKey, JsonConvert.SerializeObject(statement));
+        }
 
-        return Result.Success(statement ?? new CashFlowStatementReadModel(request.CashierId, Statements: [], 0));
+        return Result.Success(statement ?? new CashFlowStatementReadModel(request.CompanyAccountId, Statements: [], 0));
     }
 
     public async Task<Result> ValidateAsync(CashFlowStatementByDaysQuery request)
@@ -52,13 +57,13 @@ public class CashFlowStatementByDaysQueryHandler :
         if (request == null)
             return CashFlowStatementErrors.RequiredRequest;
 
-        if (request.CashierId == Guid.Empty)
-            return CashFlowStatementErrors.WithInvalidCashierId(request.CashierId);
+        if (request.CompanyAccountId == Guid.Empty)
+            return CashFlowStatementErrors.WithInvalidCompanyAccountId(request.CompanyAccountId);
 
         var validationResults
             = await new AutoValidator()
                 .Build<CashFlowStatementByDaysQuery>()
-                .With(ctx => ctx.CashierId, async value => await _service.BankAccountExistsAsync(value), $"{request.CashierId} not found!")
+                .With(ctx => ctx.CompanyAccountId, async value => await _service.BankAccountExistsAsync(value), $"{request.CompanyAccountId} not found!")
                 .With(ctx => ctx.Days, value => value >= StatementRulesConstant.MinimumDaysLimit && value <= StatementRulesConstant.MaximumDaysLimit, $"Days outside the allowed range ({StatementRulesConstant.MinimumDaysLimit} to {StatementRulesConstant.MaximumDaysLimit})")
                 .ValidateAsync(request);
 

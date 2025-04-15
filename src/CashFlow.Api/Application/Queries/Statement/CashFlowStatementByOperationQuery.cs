@@ -5,7 +5,7 @@ using CashFlow.Api.Domain.Enums;
 
 namespace CashFlow.Api.Application.Queries.Statement;
 
-public sealed record CashFlowStatementByOperationQuery(Guid CashierId, OperationType OperationType) : IRequest<Result<CashFlowStatementReadModel>>
+public sealed record CashFlowStatementByOperationQuery(Guid CompanyAccountId, OperationType OperationType) : IRequest<Result<CashFlowStatementReadModel>>
 {
     public int Days => StatementRulesConstant.MinimumDaysLimit;
 }

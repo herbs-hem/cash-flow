@@ -8,12 +8,12 @@ namespace CashFlow.Api.Domain.Services
     {
         Task<bool> BankAccountExistsAsync(Guid value);
 
-        Task<Guid> CreditAsync(Guid bankAccountId, decimal amount, string description, DateTime date, decimal balanceStartDay, decimal balanceEndDay);
+        Task<Guid> CreditAsync(Guid companyAccountId, decimal amount, string description, DateTime date, decimal balanceStartDay, decimal balanceEndDay);
 
-        Task<Guid> DebitAsync(Guid bankAccountId, decimal amount, string description, DateTime date, decimal balanceStartDay, decimal balanceEndDay);
+        Task<Guid> DebitAsync(Guid companyAccountId, decimal amount, string description, DateTime date, decimal balanceStartDay, decimal balanceEndDay);
 
-        Task<CashFlowBalanceReadModel> GetBalanceAsync(Guid bankAccountId);
+        Task<CashFlowBalanceReadModel> GetBalanceAsync(Guid companyAccountId);
 
-        Task<CashFlowStatementReadModel> GetStatementAsync(Guid bankAccountId, int days, OperationType operationType);
+        Task<CashFlowStatementReadModel> GetStatementAsync(Guid companyAccountId, int days, OperationType operationType);
     }
 }

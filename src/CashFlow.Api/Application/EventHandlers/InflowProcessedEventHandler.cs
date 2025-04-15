@@ -16,8 +16,8 @@ public class InflowProcessedEventHandler : IEventHandler<InflowProcessedEvent, G
 
     public async Task<Guid> HandleAsync(InflowProcessedEvent @event)
     {
-        _logger.LogDebug($"Processed credit transaction: {{BankAccountId}} {Environment.NewLine} {{EventData}}", @event.BankAccountId, System.Text.Json.JsonSerializer.Serialize(@event));
+        _logger.LogDebug($"Processed credit transaction: {{CompanyAccountId}} {Environment.NewLine} {{EventData}}", @event.CompanyAccountId, System.Text.Json.JsonSerializer.Serialize(@event));
 
-        return await _service.CreditAsync(@event.BankAccountId, @event.Amount, @event.Description, @event.OccurredAt, @event.BalanceStartDay, @event.BalanceEndDay);
+        return await _service.CreditAsync(@event.CompanyAccountId, @event.Amount, @event.Description, @event.OccurredAt, @event.BalanceStartDay, @event.BalanceEndDay);
     }
 }

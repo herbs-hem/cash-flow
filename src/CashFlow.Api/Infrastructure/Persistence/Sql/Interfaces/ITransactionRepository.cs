@@ -11,5 +11,5 @@ public interface ITransactionRepository
 
     Task<Transaction> GetAsync(Guid transactionId);
 
-    Task<IEnumerable<Transaction>> GetByAsync(Guid bankAccountId, DateTime initialDate, DateTime endDate, OperationType operationType);
+    Task<IEnumerable<Transaction>> GetByAsync(Guid companyAccountId, DateTime initialDate, DateTime endDate, OperationType operationType);
 }

@@ -15,9 +15,9 @@ public class MongoSnapshotStore : ISnapshotStore
         _collection = db.GetCollection<BankAccountSnapshot>("snapshots");
     }
 
-    public async Task<BankAccountSnapshot?> GetLastSnapshotAsync(Guid bankAccountId)
+    public async Task<BankAccountSnapshot?> GetLastSnapshotAsync(Guid companyAccountId)
     {
-        var filter = Builders<BankAccountSnapshot>.Filter.Eq(s => s.BankAccountId, bankAccountId);
+        var filter = Builders<BankAccountSnapshot>.Filter.Eq(s => s.CompanyAccountId, companyAccountId);
         return await _collection.Find(filter).SortByDescending(s => s.Date).FirstOrDefaultAsync();
     }
 
@@ -31,7 +31,7 @@ public class MongoSnapshotStore : ISnapshotStore
     {
         var snapshot = new BankAccountSnapshot
         {
-            BankAccountId = aggregate.BankAccountId,
+            CompanyAccountId = aggregate.CompanyAccountId,
             AggregateId = aggregate.AggregateId,
             Date = aggregate.Date,
             BalanceStart = aggregate.BalanceStartDay,

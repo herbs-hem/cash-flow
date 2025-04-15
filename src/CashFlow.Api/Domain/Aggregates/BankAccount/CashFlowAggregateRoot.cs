@@ -7,7 +7,7 @@ public class CashFlowAggregateRoot
 {
     public string AggregateId { get; private set; }
     [BsonRepresentation(MongoDB.Bson.BsonType.String)]
-    public Guid BankAccountId { get; init; }
+    public Guid CompanyAccountId { get; init; }
     public decimal BalanceStartDay { get; set; }
     public decimal BalanceEndDay { get; set; }
     public DateTime Date { get; private set; }
@@ -18,7 +18,7 @@ public class CashFlowAggregateRoot
     public CashFlowAggregateRoot(string aggregateId, DateTime date)
     {
         AggregateId = aggregateId;
-        BankAccountId = Guid.Parse(AggregateId.Split('_')[0]);
+        CompanyAccountId = Guid.Parse(AggregateId.Split('_')[0]);
         Date = date;
         BalanceStartDay = 0;
         BalanceEndDay = 0;
@@ -26,7 +26,7 @@ public class CashFlowAggregateRoot
 
     public Guid ApplyInflow(decimal amount, string description, DateTime occurredAt)
     {
-        var @event = new InflowRequestedEvent(BankAccountId, amount, description, DateTime.UtcNow);
+        var @event = new InflowRequestedEvent(CompanyAccountId, amount, description, DateTime.UtcNow);
 
         Apply(@event);
         @event.Version++;
@@ -38,9 +38,9 @@ public class CashFlowAggregateRoot
 
     public void NotifyInflowProcessed(Guid orderTransactionId, decimal amount, string description, DateTime occurredAt)
     {
-        var bankAccountId = Guid.Parse(AggregateId.Split('_')[0]);
+        var companyAccountId = Guid.Parse(AggregateId.Split('_')[0]);
 
-        var @event = new InflowProcessedEvent(orderTransactionId, amount, bankAccountId, description, occurredAt, BalanceStartDay, BalanceEndDay);
+        var @event = new InflowProcessedEvent(orderTransactionId, amount, companyAccountId, description, occurredAt, BalanceStartDay, BalanceEndDay);
         @event.Version++;
 
         AddEvents(@event);
@@ -52,10 +52,10 @@ public class CashFlowAggregateRoot
         Guid orderTransactionId = Guid.Empty;
 
         if (BalanceEndDay < amount)
-            @event = new OutflowFailedEvent(BankAccountId, "insufficient Balance", occurredAt);
+            @event = new OutflowFailedEvent(CompanyAccountId, "insufficient Balance", occurredAt);
         else
         {
-            @event = new OutflowRequestedEvent(BankAccountId, amount, description, occurredAt);
+            @event = new OutflowRequestedEvent(CompanyAccountId, amount, description, occurredAt);
             orderTransactionId = ((OutflowRequestedEvent)@event).OrderTransactionId;
         }
 
@@ -69,9 +69,9 @@ public class CashFlowAggregateRoot
 
     public void NotifyOutflowProcessed(Guid orderTransactionId, decimal amount, string description, DateTime occurredAt)
     {
-        var bankAccountId = Guid.Parse(AggregateId.Split('_')[0]);
+        var companyAccountId = Guid.Parse(AggregateId.Split('_')[0]);
 
-        var @event = new OutflowProcessedEvent(orderTransactionId, amount, bankAccountId, description, occurredAt, BalanceStartDay, BalanceEndDay);
+        var @event = new OutflowProcessedEvent(orderTransactionId, amount, companyAccountId, description, occurredAt, BalanceStartDay, BalanceEndDay);
         @event.Version++;
 
         AddEvents(@event);

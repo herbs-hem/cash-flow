@@ -21,12 +21,12 @@ public class TransactionRepository : ITransactionRepository
         using var connection = _connectionFactory.CreateConnection();
 
         await connection.ExecuteAsync(
-            @"INSERT INTO Transactions (TransactionId, BankAccountId, Amount, OperationType, Date, Description)
-              VALUES (@TransactionId, @BankAccountId, @Amount, @OperationType, @Date, @Description)",
+            @"INSERT INTO Transactions (TransactionId, CompanyAccountId, Amount, OperationType, Date, Description)
+              VALUES (@TransactionId, @CompanyAccountId, @Amount, @OperationType, @Date, @Description)",
             new
             {
                 TransactionId = transactionId,
-                transaction.BankAccountId,
+                transaction.CompanyAccountId,
                 transaction.Amount,
                 OperationType = (int)transaction.OperationType,
                 Date = DateTime.UtcNow,
@@ -62,7 +62,7 @@ public class TransactionRepository : ITransactionRepository
         using var connection = _connectionFactory.CreateConnection();
 
         var result = await connection.QueryFirstOrDefaultAsync(
-            @"SELECT TransactionId, BankAccountId, Amount, OperationType, Date, Description
+            @"SELECT TransactionId, CompanyAccountId, Amount, OperationType, Date, Description
               FROM Transactions
               WHERE TransactionId = @TransactionId",
             new { TransactionId = transactionId });
@@ -71,14 +71,14 @@ public class TransactionRepository : ITransactionRepository
 
         return new Transaction(
             result.TransactionId,
-            result.BankAccountId,
+            result.CompanyAccountId,
             result.Amount,
             result.OperationType,
             result.Date,
             result.Description);
     }
 
-    public async Task<IEnumerable<Transaction>> GetByAsync(Guid bankAccountId, DateTime initialDate, DateTime endDate, OperationType operationType)
+    public async Task<IEnumerable<Transaction>> GetByAsync(Guid companyAccountId, DateTime initialDate, DateTime endDate, OperationType operationType)
     {
         var operations = OperationType.All.Equals(operationType)
             ? [OperationType.Inflow, OperationType.Outflow]
@@ -87,22 +87,22 @@ public class TransactionRepository : ITransactionRepository
         using var connection = _connectionFactory.CreateConnection();
 
         var results = await connection.QueryAsync(
-            @"SELECT TransactionId, BankAccountId, Amount, OperationType, Date, Description
+            @"SELECT TransactionId, CompanyAccountId, Amount, OperationType, Date, Description
               FROM Transactions
-              WHERE BankAccountId = @BankAccountId
+              WHERE CompanyAccountId = @CompanyAccountId
               AND Date BETWEEN @InitialDate AND @EndDate
               AND OperationType IN @OperationTypes
               ORDER BY Date DESC",
             new
             {
-                BankAccountId = bankAccountId,
+                CompanyAccountId = companyAccountId,
                 InitialDate = initialDate,
                 EndDate = endDate,
                 OperationTypes = operations
             });
 
         return results.Select(r => new Transaction(
-            r.BankAccountId,
+            r.CompanyAccountId,
             r.Amount,
             (OperationType)r.OperationType,
             r.Description,

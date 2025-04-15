@@ -1,6 +1,6 @@
 ﻿namespace CashFlow.Api.Domain.Events;
 
-public record InflowRequestedEvent(Guid BankAccountId, decimal Amount, string Description, DateTime OccurredAt) : IDomainEvent
+public record InflowRequestedEvent(Guid CompanyAccountId, decimal Amount, string Description, DateTime OccurredAt) : IDomainEvent
 {
     public Guid OrderTransactionId => Guid.NewGuid();
     public Guid EventId { get; set; } = Guid.NewGuid();

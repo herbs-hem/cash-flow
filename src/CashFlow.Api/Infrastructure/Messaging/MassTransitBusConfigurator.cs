@@ -1,3 +1,4 @@
+using CashFlow.Api.EntryPoint.Consumer;
 using MassTransit;
 using RabbitMQ.Client;
 using RabbitMqSettings = CashFlow.Api.Infrastructure.Settings.RabbitMQ;
@@ -13,16 +14,16 @@ public static class MassTransitBusConfigurator
 
         services.AddMassTransit(registrationConfigurator =>
         {
-            //foreach (var queue in config.Queues)
-            //{
-            //    Type consumerType = GetEventConsumerBy(queue.Value.Name);
+            foreach (var queue in config.Queues)
+            {
+                Type consumerType = GetEventConsumerBy(queue.Value.Name);
 
-            //    registrationConfigurator.AddConsumer(consumerType);
+                registrationConfigurator.AddConsumer(consumerType);
 
-            //    Type dlqConsumerType = GetDlqEventConsumerBy(queue.Value.Name);
+                Type dlqConsumerType = GetDlqEventConsumerBy(queue.Value.Name);
 
-            //    registrationConfigurator.AddConsumer(dlqConsumerType);
-            //}
+                registrationConfigurator.AddConsumer(dlqConsumerType);
+            }
 
             registrationConfigurator.UsingRabbitMq((context, cfg) =>
             {
@@ -34,7 +35,7 @@ public static class MassTransitBusConfigurator
 
                 foreach (var queue in config.Queues)
                 {
-                    //Type consumerType = GetEventConsumerBy(queue.Value.Name);
+                    Type consumerType = GetEventConsumerBy(queue.Value.Name);
 
                     cfg.ReceiveEndpoint(queue.Value.Name, e =>
                     {
@@ -44,7 +45,7 @@ public static class MassTransitBusConfigurator
                         e.SetQueueArgument("x-dead-letter-exchange", queue.Value.DLQ.Exchange);
                         e.SetQueueArgument("x-dead-letter-routing-key", queue.Value.DLQ.Queue);
 
-                        //e.ConfigureConsumer(context, consumerType);
+                        e.ConfigureConsumer(context, consumerType);
                     });
 
                     cfg.ReceiveEndpoint(queue.Value.DLQ.Queue, e =>
@@ -56,9 +57,9 @@ public static class MassTransitBusConfigurator
                         });
 
                         // Tratar mensagens na DLQ aqui - Define o consumidor para a DLQ
-                        //var consumerType = GetDlqEventConsumerBy(queue.Value.Name);
+                        var consumerType = GetDlqEventConsumerBy(queue.Value.Name);
 
-                        //e.ConfigureConsumer(context, consumerType);
+                        e.ConfigureConsumer(context, consumerType);
                     });
                 }
             });
@@ -67,32 +68,32 @@ public static class MassTransitBusConfigurator
         return services;
     }
 
-    //private static Type GetEventConsumerBy(string queueName)
-    //{
-    //    var eventType = GetConsumerTypeByQueueName(queueName);
+    private static Type GetEventConsumerBy(string queueName)
+    {
+        var eventType = GetConsumerTypeByQueueName(queueName);
 
-    //    return typeof(EventConsumer<>).MakeGenericType(eventType);
-    //}
+        return typeof(EventConsumer<>).MakeGenericType(eventType);
+    }
 
-    //private static Type GetDlqEventConsumerBy(string queueName)
-    //{
-    //    var eventType = GetConsumerTypeByQueueName(queueName);
+    private static Type GetDlqEventConsumerBy(string queueName)
+    {
+        var eventType = GetConsumerTypeByQueueName(queueName);
 
-    //    return typeof(DeadLetterEventConsumer<>).MakeGenericType(eventType);
-    //}
+        return typeof(DeadLetterEventConsumer<>).MakeGenericType(eventType);
+    }
 
-    //private static Type GetConsumerTypeByQueueName(string queueName)
-    //{
-    //    var eventType = AppDomain.CurrentDomain
-    //        .GetAssemblies()
-    //        .SelectMany(a => a.GetTypes())
-    //        .FirstOrDefault(t => t.Name == queueName);
+    private static Type GetConsumerTypeByQueueName(string queueName)
+    {
+        var eventType = AppDomain.CurrentDomain
+            .GetAssemblies()
+            .SelectMany(a => a.GetTypes())
+            .FirstOrDefault(t => t.Name == queueName);
 
-    //    if (eventType == null)
-    //    {
-    //        throw new InvalidOperationException($"Tipo de evento '{queueName}' não encontrado.");
-    //    }
+        if (eventType == null)
+        {
+            throw new InvalidOperationException($"Tipo de evento '{queueName}' não encontrado.");
+        }
 
-    //    return eventType;
-    //}
+        return eventType;
+    }
 }

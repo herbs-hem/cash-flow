@@ -31,7 +31,7 @@ public static class MySqlDbExtension
             // Tabela AccountBalances
             await connection.ExecuteAsync(@"
                 CREATE TABLE IF NOT EXISTS AccountBalances (
-                    BankAccountId CHAR(36) PRIMARY KEY,
+                    CompanyAccountId CHAR(36) PRIMARY KEY,
                     InitialBalance DECIMAL(18,2) NOT NULL,
                     FinalBalance DECIMAL(18,2) NOT NULL,
                     Date DATETIME NOT NULL
@@ -41,18 +41,30 @@ public static class MySqlDbExtension
             await connection.ExecuteAsync(@"
                 CREATE TABLE IF NOT EXISTS Transactions (
                     TransactionId CHAR(36) PRIMARY KEY,
-                    BankAccountId CHAR(36) NOT NULL,
+                    CompanyAccountId CHAR(36) NOT NULL,
                     Amount DECIMAL(18,2) NOT NULL,
                     OperationType INT NOT NULL,
                     Date DATETIME NOT NULL,
                     Description VARCHAR(255),
-                    FOREIGN KEY (BankAccountId) REFERENCES AccountBalances(BankAccountId)
+                    FOREIGN KEY (CompanyAccountId) REFERENCES AccountBalances(CompanyAccountId)
                 )");
 
             // Índice para melhorar consultas por conta e data
-            await connection.ExecuteAsync(@"
-                CREATE INDEX IF NOT EXISTS idx_transactions_bankaccount_date
-                ON Transactions(BankAccountId, Date)");
+            // Índice para melhorar consultas por conta e data
+            var indexExists = await connection.QueryFirstOrDefaultAsync<int>(@"
+                SELECT COUNT(*) 
+                FROM INFORMATION_SCHEMA.STATISTICS 
+                WHERE TABLE_SCHEMA = DATABASE()
+                  AND TABLE_NAME = 'Transactions'
+                  AND INDEX_NAME = 'idx_transactions_bankaccount_date';");
+
+            if (indexExists == 0)
+            {
+                await connection.ExecuteAsync(@"
+                CREATE INDEX idx_transactions_bankaccount_date
+                ON Transactions(CompanyAccountId, Date);");
+            }
+
         }
         catch (Exception ex)
         {
