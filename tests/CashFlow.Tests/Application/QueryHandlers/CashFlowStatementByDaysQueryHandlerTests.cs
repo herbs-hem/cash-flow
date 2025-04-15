@@ -29,7 +29,7 @@ public class CashFlowStatementByDaysQueryHandlerTests : CashFlowQueryHandlerBase
         var cacheClient = Substitute.For<ICacheClient>();
         var logger = Substitute.For<ILogger<CashFlowStatementByDaysQueryHandler>>();
 
-        service.CompanyAccountExistsAsync(query.CompanyAccountId).ReturnsForAnyArgs(true);
+        service.CompanyAccountExistsAsync(query.CompanyAccountId).Returns(true);
 
         cacheClient.TryGetValue(Arg.Any<string>(), out CashFlowStatementReadModel bankStatement)
             .Returns(x =>
@@ -163,6 +163,7 @@ public class CashFlowStatementByDaysQueryHandlerTests : CashFlowQueryHandlerBase
     public async Task DaysQueryHandler_Handle_Should_Return_Failure_When_Request_DaysIsOutOfRange()
     {
         // Arrange
+        var expectedError = CashFlowStatementErrors.FailedValidationRules($"Days: Days outside the allowed range ({StatementRulesConstant.MinimumDaysLimit} to {StatementRulesConstant.MaximumDaysLimit})");
         var query = 
             _fixture.Build<CashFlowStatementByDaysQuery>()
                     .With(x => x.CompanyAccountId, CompanyAccountId)
@@ -181,7 +182,7 @@ public class CashFlowStatementByDaysQueryHandlerTests : CashFlowQueryHandlerBase
 
         // Assert
         result.IsFailure.Should().BeTrue();
-        result.Error.Code.Should().Be(CashFlowStatementErrors.FailedValidationRules(Arg.Any<string>()).Code);
+        result.Error.Should().Be(expectedError);
     }
 
     [Fact]

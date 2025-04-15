@@ -8,6 +8,7 @@ using CashFlow.Api.Infrastructure.Cache.Interfaces;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
+using NSubstitute.ClearExtensions;
 
 namespace CashFlow.Tests.Application.QueryHandlers;
 
@@ -94,22 +95,23 @@ public class CashFlowStatementByDaysAndOperationQueryHandlerTests : CashFlowQuer
         await cacheClient.Received().SetAsync(Arg.Any<string>(), expectedStatement);
     }
 
-    [Fact]
+    [Fact()]
     public async Task DaysAndOperationQueryHandler_Handle_Should_Return_EmptyStatement_When_Service_ReturnsNull()
     {
         // Arrange
         var query =
             _fixture.Build<CashFlowStatementByDaysAndOperationQuery>()
-                    .With(x => x.CompanyAccountId, Guid.Empty)
+                    .With(x => x.CompanyAccountId, CompanyAccountId)
                     .With(x => x.Days, StatementRulesConstant.MinimumDaysLimit + 1)
                     .With(x => x.OperationType, OperationType.Inflow)
                     .Create();
+
 
         var service = Substitute.For<ICashFlowTransactionService>();
         var cacheClient = Substitute.For<ICacheClient>();
         var logger = Substitute.For<ILogger<CashFlowStatementByDaysAndOperationQueryHandler>>();
 
-        service.CompanyAccountExistsAsync(query.CompanyAccountId).ReturnsForAnyArgs(true);
+        service.CompanyAccountExistsAsync(query.CompanyAccountId).Returns(true);
         service.GetStatementAsync(query.CompanyAccountId, query.Days, query.OperationType)
             .Returns((CashFlowStatementReadModel?)null);
 
@@ -176,6 +178,7 @@ public class CashFlowStatementByDaysAndOperationQueryHandlerTests : CashFlowQuer
     public async Task DaysAndOperationQueryHandler_Handle_Should_Return_Failure_When_Request_DaysIsOutOfRange()
     {
         // Arrange
+        var expectedError = CashFlowStatementErrors.FailedValidationRules($"Days: Days outside the allowed range ({StatementRulesConstant.MinimumDaysLimit} to {StatementRulesConstant.MaximumDaysLimit})");
         var query =
             _fixture.Build<CashFlowStatementByDaysAndOperationQuery>()
                     .With(x => x.CompanyAccountId, CompanyAccountId)
@@ -196,7 +199,8 @@ public class CashFlowStatementByDaysAndOperationQueryHandlerTests : CashFlowQuer
 
         // Assert
         result.IsFailure.Should().BeTrue();
-        result.Error.Code.Should().Be(CashFlowStatementErrors.FailedValidationRules(Arg.Any<string>()).Code);
+
+        result.Error.Should().Be(expectedError);
     }
 
     [Fact]
