@@ -1,9 +1,17 @@
 using CashFlow.Api.Application.CommandHandlers;
+using CashFlow.Api.Application.EventHandlers;
+using CashFlow.Api.Domain.Events;
+using CashFlow.Api.Domain.Services;
+using CashFlow.Api.EntryPoint.Consumer;
+using CashFlow.Api.EntryPoints.Endpoints.Consolidation;
 using CashFlow.Api.EntryPoints.Endpoints.Middleware;
 using CashFlow.Api.EntryPoints.Endpoints.Transactions;
+using CashFlow.Api.Infrastructure.Cache;
 using CashFlow.Api.Infrastructure.Messaging;
 using CashFlow.Api.Infrastructure.Persistence.NoSql;
+using CashFlow.Api.Infrastructure.Persistence.Sql;
 using CashFlow.Api.Infrastructure.Settings;
+using MassTransit;
 using Microsoft.OpenApi.Models;
 using PocCQRS.Infrastructure.Messaging;
 using MongoDbSettings = CashFlow.Api.Infrastructure.Settings.MongoDB;
@@ -28,7 +36,19 @@ builder.Services.AddMediatR(cfg =>
 builder.Services.AddMassTransitBus(builder.Configuration);
 builder.Services.AddSingleton<IPublisherFactory, PublisherFactory>();
 
+builder.Services.AddSqlPersistence();
 builder.Services.AddNoSqlPersistence(builder.Configuration);
+builder.Services.AddCachePersistence(builder.Configuration);
+
+// Registrando todos os handlers
+builder.Services.AddScoped<IEventHandler<InflowProcessedEvent, Guid>, InflowProcessedEventHandler>();
+builder.Services.AddScoped<IEventHandler<OutflowProcessedEvent, Guid>, OutflowProcessedEventHandler>();
+
+// Registrando o consumer genérico
+builder.Services.AddScoped(typeof(IConsumer<>), typeof(EventConsumer<>));
+builder.Services.AddScoped(typeof(IConsumer<>), typeof(DeadLetterEventConsumer<>));
+
+builder.Services.AddScoped<ICashFlowTransactionService, CashFlowTransactionService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -52,6 +72,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseMiddleware<ExceptionHandlingExceptionMiddleware>();
 
-app.MapBankAccountTransactionEndpoints();
+app.MapCashFlowTransactionEndpoints();
+app.MapCashFlowBalanceEndpoints();
+app.MapCashFlowStatementEndpoints();
 
 await app.RunAsync();

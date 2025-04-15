@@ -1,0 +1,24 @@
+@CashFlow.Transaction.Api_HostAddress = http://localhost:5141
+
+POST {{CashFlow.Transaction.Api_HostAddress}}/inflow
+Accept: application/json
+Content-Type: application/json
+
+{
+   CachierId: 1,
+   Amount: 100
+   "Description": "SODIMM module 16Gb paid"
+}
+###
+
+POST {{CashFlow.Transaction.Api_HostAddress}}/outflow
+Accept: application/json
+Content-Type: application/json
+
+{
+   CachierId: 1,
+   Amount: 100
+   "Description": "employee wage paid"
+}
+
+###

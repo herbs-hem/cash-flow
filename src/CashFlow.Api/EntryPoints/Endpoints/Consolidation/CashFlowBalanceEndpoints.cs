@@ -7,23 +7,23 @@ namespace CashFlow.Api.EntryPoints.Endpoints.Consolidation;
 
 public static class CashFlowBalanceEndpoints
 {
-    public static void MapBankAccountBalanceEndpoints(this WebApplication app)
+    public static void MapCashFlowBalanceEndpoints(this WebApplication app)
     {
-        app.MapGet("/api/v1/account/balance/{bankAccountId}",
+        app.MapGet("/api/v1/cashflow/balance/{bankAccountId}",
             async ([FromRoute] string bankAccountId, IMediator mediator) =>
             {
                 var query = new CashFlowBalanceByCashierIdQuery(Guid.Parse(bankAccountId));
                 var result = await mediator.Send(query);
 
                 if (result is null)
-                    return Results.NotFound("Bank account not found!");
+                    return Results.NotFound("Cash Flow Balance not found!");
 
                 return result.IsSuccess ? Results.Ok(new { result.Value!.BankAccountId, result.Value!.Balance }) : result.ToProblemDetails();
             })
-            .WithName("GetBankBalannce")
-            .WithSummary("Bank Balance")
-            .WithDescription("Retrieve the bank balance of a bank account number")
-            .WithTags("BankBalance")
+            .WithName("GetBalannce")
+            .WithSummary("Cash Flow Balance")
+            .WithDescription("Retrieve the cash flow balance of a cashier identifier")
+            .WithTags("CashFlowBalance")
             .WithOpenApi();
     }
 }

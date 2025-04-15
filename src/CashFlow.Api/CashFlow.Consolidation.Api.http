@@ -1,0 +1,38 @@
+@CashFlow.Consolidation.Api_HostAddress = http://localhost:5141/api/v1/cashflow
+
+###
+
+GET {{CashFlow.Consolidation.Api_HostAddress}}/balance/1
+Accept: application/json
+
+###
+
+GET {{CashFlow.Consolidation.Api_HostAddress}}/statement/1
+Accept: application/json
+
+###
+
+GET {{CashFlow.Consolidation.Api_HostAddress}}/statements/1/15
+Accept: application/json
+
+###
+
+GET {{CashFlow.Consolidation.Api_HostAddress}}/statements/1/inflow
+Accept: application/json
+
+###
+
+GET {{CashFlow.Consolidation.Api_HostAddress}}/statements/1/inflow/30
+Accept: application/json
+
+###
+
+GET {{CashFlow.Consolidation.Api_HostAddress}}/statements/1/outflow
+Accept: application/json
+
+###
+
+GET {{CashFlow.Consolidation.Api_HostAddress}}/statements/1/outflow/90
+Accept: application/json
+
+###
