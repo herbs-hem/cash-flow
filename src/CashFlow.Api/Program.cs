@@ -17,7 +17,6 @@ using MassTransit;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
-using PocCQRS.Infrastructure.Messaging;
 using MongoDbSettings = CashFlow.Api.Infrastructure.Settings.MongoDB;
 using RabbitMqSettings = CashFlow.Api.Infrastructure.Settings.RabbitMQ;
 

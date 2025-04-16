@@ -6,7 +6,6 @@ using CashFlow.Api.Domain.Abstractions;
 using CashFlow.Api.Domain.Abstractions.Extensions;
 using CashFlow.Api.Domain.Abstractions.Generic;
 using CashFlow.Api.Domain.Constants;
-using CashFlow.Api.Domain.Entities;
 using CashFlow.Api.Domain.Services;
 using CashFlow.Api.Infrastructure.Cache.Interfaces;
 using CashFlow.Api.Domain.Enums;
@@ -65,13 +64,13 @@ public class CashFlowStatementByOperationQueryHandler :
         var validationResults
             = await new AutoValidator()
                 .Build<CashFlowStatementByOperationQuery>()
-                .With(ctx => ctx.CompanyAccountId, async value => await _service.CompanyAccountExistsAsync(value), $"{nameof(request.CompanyAccountId)}: {request.CompanyAccountId} not found! ")
+                .With(ctx => ctx.CompanyAccountId, async value => await _service.CompanyAccountExistsAsync(value), $"{request.CompanyAccountId} not found!")
                 .With(ctx => ctx.OperationType, value => OperationType.All != value, "Query only allows Inflow or Outflow transactions!")
                 .ValidateAsync(request);
 
         if (!validationResults.IsValid)
         {
-            string errorMessage = string.Join(Environment.NewLine, validationResults.Errors.Select(e => $"-> {e.Key} => {e.Value}"));
+            string errorMessage = string.Join(Environment.NewLine, validationResults.Errors.Select(e => $"{e.Key}: {e.Value}"));
 
             return CashFlowStatementErrors.FailedValidationRules(errorMessage);
         }

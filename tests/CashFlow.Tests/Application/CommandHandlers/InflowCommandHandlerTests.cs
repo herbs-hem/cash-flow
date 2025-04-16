@@ -94,7 +94,7 @@ public class InflowCommandHandlerTests
         publishedEvent!.Amount.Should().Be(command.Amount);
     }
 
-    [Fact(Skip = "Refatorar publisher para testar")]
+    [Fact(Skip ="a")]
     public async Task Handle_ShouldAppendEvents_AndPublishProcessedEvent_WhenSnapshotNotFound()
     {
         // Arrange

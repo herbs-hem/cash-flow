@@ -2,7 +2,7 @@ using MassTransit;
 using CashFlow.Api.Infrastructure.Settings;
 using CashFlow.Api.Infrastructure.Messaging;
 
-namespace PocCQRS.Infrastructure.Messaging;
+namespace CashFlow.Api.Infrastructure.Messaging;
 
 public class PublisherFactory : IPublisherFactory
 {
