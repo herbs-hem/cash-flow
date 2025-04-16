@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+    <ItemGroup>
+        <!-- ASP.NET Core e Swagger -->
+        <PackageReference Include="GreenPipes" Version="4.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
+        <PackageReference Include="MongoDB.Driver" Version="3.3.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Polly" Version="8.5.2" />
+        <PackageReference Include="StackExchange.Redis" Version="2.8.31" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+
+        <!-- MediatR (CQRS) -->
+        <!-- Versão 12+ já inclui a DI, REMOVA a linha abaixo -->
+        <!-- <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="12.1.1" /> -->
+        <PackageReference Include="MediatR" Version="12.1.1" />
+
+        <!-- Banco de Dados (MySQL + Dapper) -->
+        <PackageReference Include="Dapper" Version="2.0.123" />
+        <PackageReference Include="MySql.Data" Version="8.0.32" />
+
+        <!-- Mensageria (MassTransit + RabbitMQ) -->
+        <PackageReference Include="MassTransit" Version="8.0.0" />
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.0" />
+
+        <!-- Configuração e Utilitários -->
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\CashFlow.Domain\CashFlow.Domain.csproj" />
+    </ItemGroup>
+
+</Project>

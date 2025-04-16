@@ -1,0 +1,23 @@
+{
+  "ReverseProxy": {
+    "Routes": [
+      {
+        "RouteId": "service1",
+        "ClusterId": "service1Cluster",
+        "Match": {
+          "Path": "/service1/{**catch-all}"
+        },
+        "AuthorizationPolicy": "Service1Policy"
+      }
+    ],
+    "Clusters": {
+      "service1Cluster": {
+        "Destinations": {
+          "service1Destination": {
+            "Address": "http://localhost:5001/"
+          }
+        }
+      }
+    }
+  }
+}

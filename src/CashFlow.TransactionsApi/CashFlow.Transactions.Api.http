@@ -1,0 +1,6 @@
+@PocCQRS.TransactionsApi_HostAddress = http://localhost:5045
+
+GET {{PocCQRS.TransactionsApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
