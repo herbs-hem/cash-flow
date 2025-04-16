@@ -55,7 +55,7 @@ Requerimentos técnicos para executar estes testes:
 _**Remark:**_ _{root} => Este é um espaço reservado para palavras, significa que o local onde você baixou essa solução do projeto._
 
 ### _Outstading tasks:_
-- Na branch `feature/poc-clean-arch-way` o projeto será segregado respeitando a estrutura do projeto definida pela arquitetura limpa;
+- Na branch `feature/poc-clean-architecture-way` o projeto será segregado respeitando a estrutura do projeto definida pela arquitetura limpa;
 - Na branch `feature/acceptance-tests` serão implementados os testes de aceitação;
 - Na branch `feature/unit-tests` serão inclusos os demais testes de unidade para obter uma cobertura de 95%;
 - Na branch `feature/smoke-tests` serão inclusos os testes usando newman para ser usados na pipeline como parte do Build (CI);
