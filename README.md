@@ -1,8 +1,27 @@
 # cash-flow
 Cash flow control system
 
-![Build](https://github.com/herbs-hem/cash-flow/actions/workflows/dotnet.yml/badge.svg?branch=develop)
-![Code Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/herbs-hem/f73a416622385d938620d3b03344737d/raw/code-coverage.json)
+### Status e Qualidade do Código
+
+![Build](https://github.com/herbs-hem/cash-flow/actions/workflows/ci.yml/badge.svg?branch=develop)
+![Coverage](https://herbs-hem.github.io/cash-flow/badge_linecoverage.svg)
+![Smoke Tests](https://github.com/herbs-hem/cash-flow/actions/workflows/cd.yml/badge.svg)
+
+### Tipos de Testes Implementados
+
+| Tipo de Teste       | Descrição                                                      |
+|---------------------|----------------------------------------------------------------|
+| Unit Test           | Testa classes isoladamente com mocks e asserts                 |
+| Snapshot Test       | Valida a saída de JSONs esperados                              |
+| Contract Test       | Verifica contratos de APIs                                     |
+| Integration Test    | Verifica integração entre componentes e bancos de dados        |
+| Acceptance Test     | Testa fluxos funcionais completos com BDD (SpecFlow)           |
+| Smoke Test          | Verifica se os serviços estão respondendo corretamente         |
+| BenchmarkDotNet     | Mede desempenho de métodos críticos                            |
+| JMeter              | Realiza stress test via scripts JMX                            |
+| Gatling             | Simula cenários de carga com usuários virtuais em Scala        |
+
+> Os relatórios completos estão disponíveis em [Relatórios](https://herbs-hem.github.io/cash-flow/).
 
 ## Cash Flow
 Este projeto de aplicação tem sido criado a partir da iniciativa **_.Net Software Engineer/Architect Practicum Test_**. 
